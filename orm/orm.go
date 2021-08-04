@@ -8,6 +8,7 @@ import (
 
 	// mysql driver
 
+	"github.com/dedecms/dedetools/encode"
 	"github.com/dedecms/snake"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/i582/cfmt/cmd/cfmt"
@@ -29,7 +30,12 @@ type Config struct {
 
 func GetCommon(file string) error {
 	if f, ok := snake.FS(file).Open(); ok {
-		for _, v := range f.String().Lines() {
+		bytes := f.Byte()
+		utf8, _ := encode.GetEncoding(bytes)
+		if utf8.Charset != "UTF-8" {
+			bytes = utf8.Bytes()
+		}
+		for _, v := range snake.String(string(bytes)).LF().Lines() {
 			arr := snake.String(v).Split("=")
 			if len(arr) == 2 {
 				k := snake.String(arr[0]).Remove("\\'", "\\;", "\\$").Trim(" ").Get()
@@ -54,14 +60,13 @@ func GetCommon(file string) error {
 				case "cfg_db_language":
 					Conf.Charset = v
 				case "cfg_dbtype":
-					if v != "mysql" {
+					if snake.String(v).Widen().Trim(" ").Trim("	").Get() != snake.String("mysql").Widen().Get() {
 						return fmt.Errorf("无法转换非Mysql/MariaDB数据库的数据。")
 					}
 				}
 			}
 		}
 	}
-
 	dbDSN = snake.String(Conf.User).
 		Add(":").
 		Add(Conf.Pass).
@@ -72,7 +77,6 @@ func GetCommon(file string) error {
 		Add(")/").
 		Add(snake.String("?charset=").Add(Conf.Charset).Get()).
 		Get()
-
 	return nil
 
 }

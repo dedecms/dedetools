@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dedecms/dedetools/encode"
 	"github.com/dedecms/dedetools/log"
 	"github.com/dedecms/dedetools/orm"
 	"github.com/dedecms/dedetools/util"
@@ -90,15 +91,20 @@ AUTH:
 }
 
 func backupWWW(wwwDIR, outputDIR string) error {
-	arr := snake.FS(wwwDIR).Find("*")
-	l := log.Start("对网站文件进行转码", len(arr))
 
+	l := log.Start("获取网站文件列表")
+	arr := snake.FS(wwwDIR).Find("*")
+	l.Done()
+
+	l = log.Start("对网站文件进行转码", len(arr))
 	cext := []string{
 		".html",
 		".htm",
 		".php",
 		".txt",
 		".xml",
+		".js",
+		".css",
 	}
 
 	for _, v := range arr {
@@ -110,22 +116,23 @@ func backupWWW(wwwDIR, outputDIR string) error {
 			outfile = snake.String(dir.Get()).Add("/").Add(v)
 		}
 
-		if snake.FS(v).IsDir() && !strings.HasPrefix(v, snake.FS(outputDIR).Get()) {
-			snake.FS(outfile.Get()).MkDir()
-		}
+		if !strings.HasPrefix(v, snake.FS(outputDIR).Get()) {
 
-		if snake.FS(v).IsFile() {
-			f, _ := snake.FS(v).Open()
-			defer f.Close()
-			bytes := f.Byte()
-			if snake.String(snake.FS(v).Ext()).ExistSlice(cext) {
-				utf8, _ := util.GetEncoding(bytes)
-				if utf8.Charset != "UTF-8" {
-					bytes = utf8.Bytes()
-				}
+			if snake.FS(v).IsDir() {
+				snake.FS(outfile.Get()).MkDir()
 			}
 
-			if !strings.HasPrefix(v, snake.FS(outputDIR).Get()) {
+			if snake.FS(v).IsFile() {
+				f, _ := snake.FS(v).Open()
+				defer f.Close()
+				bytes := f.Byte()
+				if snake.String(snake.FS(v).Ext()).ExistSlice(cext) {
+					utf8, _ := encode.GetEncoding(bytes)
+					if utf8.Charset != "UTF-8" {
+						bytes = utf8.Bytes()
+					}
+				}
+
 				snake.FS(outfile.Get()).ByteWriter(bytes)
 			}
 		}

@@ -45,7 +45,7 @@ func Init(in clif.Input, out clif.Output) {
 			TopLeft:     "#",
 		}).Get())
 
-	l := log.Start("检测mysql是否可以执行")
+	l := log.Start("检查mysql是否可以执行")
 MYSQL:
 	if path, err := exec.LookPath(env.mysqlPATH); err != nil {
 		l.Err(err)
@@ -56,7 +56,7 @@ MYSQL:
 	}
 	l.Done()
 
-	l = log.Start("检测mysqldump是否可以执行")
+	l = log.Start("检查mysqldump是否可以执行")
 MYSQLDUMP:
 	if path, err := exec.LookPath(env.mysqldumpPATH); err != nil {
 		l.Err(err)
@@ -71,7 +71,7 @@ MYSQLDUMP:
 	outputDIR := util.Ask("请输入DedeCMS转换后存储目录位置", "./output_dedecms_utf8", "makedir", in)
 
 BACKUPSQL:
-	common := util.Ask("请输入common.inc.php文件位置", "./data/common.inc.php", "existfile", in)
+	common := util.Ask("请输入./data/common.inc.php文件位置", "./data/common.inc.php", "existfile", in)
 	orm.GetCommon(common)
 
 	if err := backupSQL(outputDIR); err != nil {
@@ -80,14 +80,31 @@ BACKUPSQL:
 	}
 	backupWWW(wwwdir, outputDIR)
 	fmt.Println()
-	database := util.Ask("请输入UTF8导入数据库名", "dedecms_gbk_to_utf8", "database", in)
+	database := util.Ask("请输入UTF8数据库名 <warn>(禁止覆盖原数据库)<reset>", "db_output_dedecms_utf8", "database", in)
 AUTH:
 	user := util.Ask("请输入用于创建新数据库的用户名", orm.Conf.User, "string", in)
 	pass := util.Ask("请输入密码", orm.Conf.Pass, "string", in)
 	if err := importSQL(database, user, pass, outputDIR); err != nil {
 		goto AUTH
 	}
+	commonPATH := snake.FS(outputDIR, "www/data/common.inc.php").Get()
+	editCommon(commonPATH, database, user, pass)
 
+}
+
+func editCommon(file, database, user, pass string) {
+	l := log.Start("更新./data/common.inc.php文件")
+	defer l.Done()
+	f, ok := snake.FS(file).Open()
+	if !ok {
+		return
+	}
+	defer f.Close()
+	f.String().
+		Replace(`((.*|)\$cfg_dbname(.*)=(.*)("|')).*(('|");)`, "${1}"+database+"${6}"). // 替换数据库名
+		Replace(`((.*|)\$cfg_dbuser(.*)=(.*)("|')).*(('|");)`, "${1}"+user+"${6}").     // 替换用户名
+		Replace(`((.*|)\$cfg_dbpwd(.*)=(.*)("|')).*(('|");)`, "${1}"+pass+"${6}").      // 替换密码
+		Write(file)
 }
 
 func backupWWW(wwwDIR, outputDIR string) error {
@@ -105,6 +122,12 @@ func backupWWW(wwwDIR, outputDIR string) error {
 		".xml",
 		".js",
 		".css",
+		".inc",
+	}
+
+	rep := []string{
+		".html",
+		".htm",
 	}
 
 	for _, v := range arr {
@@ -129,7 +152,31 @@ func backupWWW(wwwDIR, outputDIR string) error {
 				if snake.String(snake.FS(v).Ext()).ExistSlice(cext) {
 					utf8, _ := encode.GetEncoding(bytes)
 					if utf8.Charset != "UTF-8" {
-						bytes = utf8.Bytes()
+						if snake.String(snake.FS(v).Ext()).ExistSlice(rep) {
+							bytes = snake.String(utf8.Text()).
+								Replace(`(<meta ((http-equiv|content).*(http-equiv|content)|).*charset.*=.*)(?i)(gbk|gb2312|big5)(.*>)`, "${1}utf-8${6}"). // 替换 *.HTML, *.HTM META CHARSET
+								Byte()
+						} else if snake.String(snake.FS(v).Ext()).ExistSlice([]string{".xml"}) {
+							bytes = snake.String(utf8.Text()).
+								Replace(`(lang(.*|)=(.*|))(?i)(gbk|gb2312|big5)`, "${1}utf-8"). // 替换 *.XML LANG
+								Byte()
+						} else if snake.String(snake.FS(v).Ext()).ExistSlice([]string{".js"}) {
+							bytes = snake.String(utf8.Text()).
+								Replace(`((.*|)this.sendlang(.*|)=(.*|))(?i)(gbk|gb2312|big5)`, "${1}utf-8"). // 替换 *.JS this.sendlang
+								Byte()
+						} else if snake.String(snake.FS(v).Ext()).ExistSlice([]string{".css"}) {
+							bytes = snake.String(utf8.Text()).
+								Replace(`((.*|)@charset.*("|'))(?i)(gbk|gb2312|big5)`, "${1}utf-8"). // 替换 *.CSS charset
+								Byte()
+						} else if snake.String(snake.FS(v).Ext()).ExistSlice([]string{".php"}) {
+							bytes = snake.String(utf8.Text()).
+								Replace(`((.*|)\$cfg_db_language(.*)=(.*)("|'))(?i)(gbk|gb2312|big5)`, "${1}utf8mb4"). // 替换 *.CSS charset
+								Replace(`((.*|)\$cfg_soft_lang(.*)=(.*)("|'))(?i)(gbk|gb2312|big5)`, "${1}utf-8").     // 替换 *.CSS charset
+								Replace(`((.*|)\$cfg_version(.*)=(.*)("|')V(.*)_)(?i)(gbk|gb2312|big5)`, "${1}UTF8").  // 替换 *.CSS charset
+								Byte()
+						} else {
+							bytes = utf8.Bytes()
+						}
 					}
 				}
 
@@ -160,11 +207,11 @@ func backupSQL(outputDIR string) error {
 			Add("Host: ").Add(orm.Conf.Host).Ln().
 			Add("Database: ").Add(orm.Conf.Database).Ln().
 			Add("Table: ").Add(v).Ln().
-			Add("Charset: ").Add("UTF-8").Ln().
+			Add("Charset: ").Add("UTF8MB4").Ln().
 			Add("Source Charset: ").Add(orm.Conf.Charset).Ln().
 			Add("Generation Time: ").Add(time.Now().Format("2006-01-02 15:04:05")).
 			DrawBox(64).Get())
-		outputFILE.Write(orm.GetSQL(env.mysqldumpPATH, v).Replace(`(ENGINE.*CHARSET=)(gbk|big5)(\;)`, "${1}utf8${3}").Get(), true)
+		outputFILE.Write(orm.GetSQL(env.mysqldumpPATH, v).Replace(`(ENGINE.*CHARSET=)(gbk|big5)(\;)`, "${1}utf8mb4${3}").Get(), true)
 		l.Add()
 	}
 	l.Done()

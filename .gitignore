@@ -38,3 +38,5 @@ evidence
 *.htm
 *.mp4
 *.exe
+dedetools*
+data

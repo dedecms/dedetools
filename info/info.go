@@ -21,7 +21,7 @@ func CallCopyright(c *clif.Command) {
 }
 
 func AppDesc() string {
-	box := snake.String("* 内测版本，仅限内部使用，严禁外传。 *").Ln(2).
+	box := snake.String("* 内部版本，严禁外传 *").Ln(2).
 		Add("DedeCMS Manage Tools 是由上海卓卓网络科技有限公司开发的\nDedeCMS系统管理工具集。").Ln(2).
 		Add("官方网站：http://www.dedecms.com").Ln().
 		Add("产品维护：织梦团队").Ln().

@@ -10,10 +10,11 @@ import (
 )
 
 func main() {
+
 	if err := safe.Do(func() error {
-		clif.New("DedeCMS Manage Tools", "0.0.2", info.AppDesc()).
+		clif.New("DedeCMS Manage Tools", "0.1.3", info.AppDesc()).
 			New("utf8", "DedeCMS any charssset to utf-8", utf8.Init).
-			New("backup", "Backup DedeCMS", utf8.Init).
+			// New("backup", "Backup DedeCMS", utf8.Init).
 			New("copyright", "Show DedeCMS manage tools copyright.", info.CallCopyright).
 			Run()
 		return nil

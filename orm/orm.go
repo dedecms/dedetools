@@ -123,7 +123,24 @@ func GetTables() ([]string, error) {
 	return tables, nil
 }
 
-func ImportSQL(mysqlPATH, database, user, pass, file string) error {
+func ImportSQL(mysqlPATH, database, user, pass, charset, file string) error {
+
+	if Conf.Host == "" {
+		Conf.Host = "127.0.0.1"
+	}
+
+	if Conf.Port == "" {
+		Conf.Port = "3306"
+	}
+
+	if charset == "" {
+		charset = "utf8"
+	}
+
+	if Conf.Charset == "" {
+		Conf.Charset = charset
+	}
+
 	dbDSN := snake.String(user).
 		Add(":").
 		Add(pass).
@@ -132,8 +149,9 @@ func ImportSQL(mysqlPATH, database, user, pass, file string) error {
 		Add(":").
 		Add(Conf.Port).
 		Add(")/").
-		Add(snake.String("?charset=utf8").Get()).
+		Add(snake.String("?charset=").Add(Conf.Charset).Get()).
 		Get()
+
 	db, err := sql.Open("mysql", dbDSN)
 	if err != nil {
 		return cfmt.Errorf("{{错误: 无法链接数据库。}}::red(" + err.Error() + ")")

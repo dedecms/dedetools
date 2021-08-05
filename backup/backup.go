@@ -24,7 +24,8 @@ var env = new(Module)
 var now = time.Now().Format("200601021504")
 
 func Init(in clif.Input, out clif.Output) {
-
+	env.mysqlPATH = "mysql"
+	env.mysqldumpPATH = "mysqldump"
 	style := clif.DefaultStyles
 	style["query"] = ""
 	out.SetFormatter(clif.NewDefaultFormatter(style))
@@ -71,20 +72,8 @@ func Init(in clif.Input, out clif.Output) {
 }
 
 func backupdatabase(in clif.Input) {
-	env.mysqlPATH = "mysql"
-	env.mysqldumpPATH = "mysqldump"
-	l := log.Start("检查mysql是否可以执行")
-MYSQL:
-	if path, err := exec.LookPath(env.mysqlPATH); err != nil {
-		l.Err(err)
-		env.mysqlPATH = util.Ask("请输入mysql或mysql.exe的位置。", "", "file", in)
-		goto MYSQL
-	} else {
-		env.mysqlPATH = path
-	}
-	l.Done()
 
-	l = log.Start("检查mysqldump是否可以执行")
+	l := log.Start("检查mysqldump是否可以执行")
 MYSQLDUMP:
 	if path, err := exec.LookPath(env.mysqldumpPATH); err != nil {
 		l.Err(err)
@@ -110,8 +99,7 @@ BACKUPSQL:
 }
 
 func backupall(in clif.Input) {
-	env.mysqlPATH = "mysql"
-	env.mysqldumpPATH = "mysqldump"
+
 	l := log.Start("检查mysql是否可以执行")
 MYSQL:
 	if path, err := exec.LookPath(env.mysqlPATH); err != nil {

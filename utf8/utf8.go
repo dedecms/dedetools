@@ -226,7 +226,7 @@ func importSQL(database, user, pass, outputDIR string) error {
 	files := sql.Find("*.sql")
 	l := log.Start("将转码完毕的SQL文件导入数据库", len(files))
 	for _, v := range files {
-		if err := orm.ImportSQL(env.mysqlPATH, database, user, pass, v); err != nil {
+		if err := orm.ImportSQL(env.mysqlPATH, database, user, pass, "", v); err != nil {
 			l.Err(err)
 			return err
 		}

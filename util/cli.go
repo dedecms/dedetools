@@ -16,7 +16,7 @@ func Ask(t, d, o string, input clif.Input) string {
 	}
 	input.Ask(title, func(v string) error {
 
-		if snake.String(o).ExistSlice([]string{"existdir", "makedir", "existdir", "file"}) {
+		if snake.String(o).ExistSlice([]string{"existdir", "makedir", "existdir", "file"}) && v != "" {
 			v = snake.FS(v).Get()
 		}
 
@@ -28,7 +28,6 @@ func Ask(t, d, o string, input clif.Input) string {
 					if err := checkexistdir(v); err != nil {
 						return err
 					}
-
 				case "existfile":
 					if err := checkexistfile(v); err != nil {
 						return err

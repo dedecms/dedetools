@@ -15,13 +15,20 @@ func Ask(t, d, o string, input clif.Input) string {
 		title = snake.String(t).Add(":").Get()
 	}
 	input.Ask(title, func(v string) error {
+
+		if snake.String(o).ExistSlice([]string{"existdir", "makedir", "existdir", "file"}) {
+			v = snake.FS(v).Get()
+		}
+
 		if len(v) > 0 {
+
 			if input.Confirm(snake.String("是否使用当前值 [").Add(v).Add("]？ (y/n) :").Get()) {
 				switch o {
 				case "existdir":
 					if err := checkexistdir(v); err != nil {
 						return err
 					}
+
 				case "existfile":
 					if err := checkexistfile(v); err != nil {
 						return err
@@ -80,6 +87,7 @@ func checkexistdir(d string) error {
 
 	return nil
 }
+
 func checkexistfile(d string) error {
 	if !snake.FS(d).Exist() {
 		return fmt.Errorf("错误: 目标不存在，请重新输入。")

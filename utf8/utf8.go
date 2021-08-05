@@ -49,7 +49,7 @@ func Init(in clif.Input, out clif.Output) {
 MYSQL:
 	if path, err := exec.LookPath(env.mysqlPATH); err != nil {
 		l.Err(err)
-		env.mysqlPATH = util.Ask("请输入mysql或mysql.exe的位置。", "", "string", in)
+		env.mysqlPATH = util.Ask("请输入mysql或mysql.exe的位置。", "", "file", in)
 		goto MYSQL
 	} else {
 		env.mysqlPATH = path
@@ -60,7 +60,7 @@ MYSQL:
 MYSQLDUMP:
 	if path, err := exec.LookPath(env.mysqldumpPATH); err != nil {
 		l.Err(err)
-		env.mysqldumpPATH = util.Ask("请输入mysqldump或mysqldump.exe的位置。", "", "string", in)
+		env.mysqldumpPATH = util.Ask("请输入mysqldump或mysqldump.exe的位置。", "", "file", in)
 		goto MYSQLDUMP
 	} else {
 		env.mysqldumpPATH = path
@@ -147,7 +147,7 @@ func backupWWW(wwwDIR, outputDIR string) error {
 
 			if snake.FS(v).IsFile() {
 				f, _ := snake.FS(v).Open()
-				defer f.Close()
+				f.Close()
 				bytes := f.Byte()
 				if snake.String(snake.FS(v).Ext()).ExistSlice(cext) {
 					utf8, _ := encode.GetEncoding(bytes)
@@ -181,6 +181,7 @@ func backupWWW(wwwDIR, outputDIR string) error {
 				}
 
 				snake.FS(outfile.Get()).ByteWriter(bytes)
+
 			}
 		}
 

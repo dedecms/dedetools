@@ -4,8 +4,8 @@ github.com/ahmetalpbalkan/go-cursor v0.0.0-20131010032410-8136607ea412 h1:vOVO0y
 github.com/ahmetalpbalkan/go-cursor v0.0.0-20131010032410-8136607ea412/go.mod h1:AI9hp1tkp10pAlK5TCwL+7yWbRgtDm9jhToq6qij2xs=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/dedecms/snake v0.0.0-20210803063337-3a83cd4e381b h1:P7P4Aw8ZPBjon361zEHAQB/X8GiWlk0DYxmxb901WM4=
-github.com/dedecms/snake v0.0.0-20210803063337-3a83cd4e381b/go.mod h1:EOG2BkOni/DsUY7Si32+gyjZjfs8yYASrKJxDopYpjo=
+github.com/dedecms/snake v0.0.0-20210805063548-578ae1419126 h1:OvZ51aAgTv85rM/Qr6ptbgQoTuF5z04ngpBh17SoNqA=
+github.com/dedecms/snake v0.0.0-20210805063548-578ae1419126/go.mod h1:EOG2BkOni/DsUY7Si32+gyjZjfs8yYASrKJxDopYpjo=
 github.com/go-sql-driver/mysql v1.6.0 h1:BCTh4TKNUYmOmMUcQ3IipzF5prigylS7XXjEkfCHuOE=
 github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/gogs/chardet v0.0.0-20150115103509-2404f7772561/go.mod h1:Pcatq5tYkCW2Q6yrR2VRHlbHpZ/R4/7qyL1TCF7vl14=

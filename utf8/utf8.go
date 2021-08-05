@@ -147,8 +147,8 @@ func backupWWW(wwwDIR, outputDIR string) error {
 
 			if snake.FS(v).IsFile() {
 				f, _ := snake.FS(v).Open()
-				f.Close()
 				bytes := f.Byte()
+				f.Close()
 				if snake.String(snake.FS(v).Ext()).ExistSlice(cext) {
 					utf8, _ := encode.GetEncoding(bytes)
 					if utf8.Charset != "UTF-8" {
@@ -208,11 +208,11 @@ func backupSQL(outputDIR string) error {
 			Add("Host: ").Add(orm.Conf.Host).Ln().
 			Add("Database: ").Add(orm.Conf.Database).Ln().
 			Add("Table: ").Add(v).Ln().
-			Add("Charset: ").Add("UTF8MB4").Ln().
+			Add("Charset: ").Add("UTF8").Ln().
 			Add("Source Charset: ").Add(orm.Conf.Charset).Ln().
 			Add("Generation Time: ").Add(time.Now().Format("2006-01-02 15:04:05")).
 			DrawBox(64).Get())
-		outputFILE.Write(orm.GetSQL(env.mysqldumpPATH, v).Replace(`(ENGINE.*CHARSET=)(gbk|big5)(\;)`, "${1}utf8mb4${3}").Get(), true)
+		outputFILE.Write(orm.GetSQL(env.mysqldumpPATH, v).Replace(`(ENGINE.*CHARSET=)(gbk|big5)(\;)`, "${1}utf8${3}").Get(), true)
 		l.Add()
 	}
 	l.Done()

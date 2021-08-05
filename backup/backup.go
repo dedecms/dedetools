@@ -110,8 +110,9 @@ func backupWWW(wwwDIR, outputDIR string) error {
 
 			if snake.FS(v).IsFile() {
 				f, _ := snake.FS(v).Open()
+				bytes := f.Byte()
 				f.Close()
-				snake.FS(outfile.Get()).ByteWriter(f.Byte())
+				snake.FS(outfile.Get()).ByteWriter(bytes)
 			}
 		}
 

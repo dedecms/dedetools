@@ -139,6 +139,7 @@ func ImportSQL(mysqlPATH, database, user, pass, file string) error {
 		return cfmt.Errorf("{{错误: 无法链接数据库。}}::red(" + err.Error() + ")")
 	}
 	defer db.Close()
+
 	_, err = db.Exec("USE " + database)
 	if err != nil {
 		_, err = db.Exec("CREATE DATABASE " + database)

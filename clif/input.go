@@ -108,7 +108,7 @@ var RenderChooseOption = func(key, value string, size int) string {
 // to render the query prompt choice (after the choices) into a string. Can be
 // overwritten at users discretion.
 var RenderChooseQuery = func() string {
-	return "Choose: "
+	return "选择: "
 }
 
 func (this *DefaultInput) Choose(question string, choices map[string]string) string {

@@ -54,6 +54,7 @@ MYSQL:
 	} else {
 		env.mysqlPATH = path
 	}
+
 	l.Done()
 
 	l = log.Start("检查mysqldump是否可以执行")
@@ -90,6 +91,7 @@ AUTH:
 	commonPATH := snake.FS(outputDIR, "www/data/common.inc.php").Get()
 	editCommon(commonPATH, database, user, pass)
 
+	fmt.Println()
 }
 
 func editCommon(file, database, user, pass string) {
@@ -170,9 +172,9 @@ func backupWWW(wwwDIR, outputDIR string) error {
 								Byte()
 						} else if snake.String(snake.FS(v).Ext()).ExistSlice([]string{".php"}) {
 							bytes = snake.String(utf8.Text()).
-								Replace(`((.*|)\$cfg_db_language(.*)=(.*)("|'))(?i)(gbk|gb2312|big5)`, "${1}utf8mb4"). // 替换 *.CSS charset
-								Replace(`((.*|)\$cfg_soft_lang(.*)=(.*)("|'))(?i)(gbk|gb2312|big5)`, "${1}utf-8").     // 替换 *.CSS charset
-								Replace(`((.*|)\$cfg_version(.*)=(.*)("|')V(.*)_)(?i)(gbk|gb2312|big5)`, "${1}UTF8").  // 替换 *.CSS charset
+								Replace(`((.*|)\$cfg_db_language(.*)=(.*)("|'))(?i)(gbk|gb2312|big5)`, "${1}utf8").
+								Replace(`((.*|)\$cfg_soft_lang(.*)=(.*)("|'))(?i)(gbk|gb2312|big5)`, "${1}utf-8").
+								Replace(`((.*|)\$cfg_version(.*)=(.*)("|')V(.*)_)(?i)(gbk|gb2312|big5)`, "${1}UTF8").
 								Byte()
 						} else {
 							bytes = utf8.Bytes()

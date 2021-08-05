@@ -13,7 +13,7 @@ import (
 func main() {
 
 	if err := safe.Do(func() error {
-		clif.New("DedeCMS Manage Tools", "0.1.3", info.AppDesc()).
+		clif.New("DedeCMS Manage Tools", "0.2.0", info.AppDesc()).
 			New("utf8", "将DedeCMS GBK/BIG5等编码转码为UTF-8", utf8.Init).
 			New("backup", "备份DedeCMS整站数据", backup.Init).
 			New("copyright", "显示DedeCMS Manage Tools版权信息", info.CallCopyright).

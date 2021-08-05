@@ -198,7 +198,7 @@ func backupSQL(outputDIR string) error {
 
 	l := log.Start("将gbk、big5数据库转码为utf8", len(tables))
 	for _, v := range tables {
-		outputFILE := snake.FS(outputDIR).Add("sql").Add(snake.String("backup_", v, ".sql").Get())
+		outputFILE := snake.FS(outputDIR).Add("sql").Add(snake.String("utf8_", v, ".sql").Get())
 		if !outputFILE.Exist() {
 			outputFILE.MkFile()
 		}

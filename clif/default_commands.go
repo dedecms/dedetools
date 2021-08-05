@@ -4,7 +4,7 @@ import "fmt"
 
 // NewHelpCommand returns the default help command
 func NewHelpCommand() *Command {
-	return NewCommand("help", "Show this help", func(o *Command, out Output) error {
+	return NewCommand("help", "显示帮助", func(o *Command, out Output) error {
 		if n := o.Argument("command").String(); n != "" {
 			if cmd, ok := o.Cli.Commands[n]; ok {
 				out.Printf(DescribeCommand(cmd))
@@ -16,12 +16,12 @@ func NewHelpCommand() *Command {
 			out.Printf(DescribeCommand(o))
 		}
 		return nil
-	}).NewArgument("command", "Command to show help for", "", false, false)
+	}).NewArgument("command", "显示帮助的命令", "", false, false)
 }
 
 // NewListCommand returns the default help command
 func NewListCommand() *Command {
-	return NewCommand("list", "List all available commands", func(c *Cli, Command, out Output) {
+	return NewCommand("list", "可用命令列表", func(c *Cli, Command, out Output) {
 		out.Printf(DescribeCli(c))
 	})
 }

@@ -52,8 +52,8 @@ type Command struct {
 var DefaultHelpOption = &Option{
 	parameter: parameter{
 		Name:        "help",
-		Usage:       "Display this help message",
-		Description: "Display this help message",
+		Usage:       "显示帮助信息",
+		Description: "显示帮助信息",
 	},
 	Alias: "h",
 	Flag:  true,

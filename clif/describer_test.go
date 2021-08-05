@@ -1,8 +1,9 @@
 package clif
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestDescribeCommand(t *testing.T) {
@@ -29,7 +30,7 @@ func TestDescribeCommand(t *testing.T) {
   <info>baz<reset>  The baz (<debug>mult<reset>)
 
 <subline>Options:<reset>
-  <info>--help|-h     <reset>  Display this help message
+  <info>--help|-h     <reset>  显示帮助信息
   <info>--boing|-b val<reset>  The boing! (<important>req<reset>)
   <info>--zoing|-z    <reset>  The ZOING! (<debug>mult<reset>, env: <debug>THE_ZOING<reset>)
 

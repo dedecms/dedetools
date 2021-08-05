@@ -26,10 +26,10 @@ var DescribeCli = func(c *Cli) string {
 
 	// usage
 	prog := filepath.Base(os.Args[0])
-	lines = append(lines, fmt.Sprintf("<subline>Usage:<reset>\n  %s command [arg ..] [--opt val ..]\n", prog))
+	lines = append(lines, fmt.Sprintf("<subline>使用方法:<reset>\n  %s command [arg ..] [--opt val ..]\n", prog))
 
 	// commands
-	lines = append(lines, "<subline>Available commands:<reset>")
+	lines = append(lines, "<subline>可用命令:<reset>")
 	max := 0
 	ordered := make(map[string][]*Command)
 	prefices := make([]string, 0)
@@ -72,7 +72,7 @@ var DescribeCommand = func(c *Command) string {
 		lines = append(lines, []string{"<info>" + c.Usage + "<reset>", ""}...)
 	}
 
-	lines = append(lines, "<subline>Usage:<reset>")
+	lines = append(lines, "<subline>使用方法:<reset>")
 	usage := []string{c.Name}
 	args := make([][]string, 0)
 	argMax := 0
@@ -147,7 +147,7 @@ var DescribeCommand = func(c *Command) string {
 	lines = append(lines, "")
 
 	if len(args) > 0 {
-		lines = append(lines, "<subline>Arguments:<reset>")
+		lines = append(lines, "<subline>可用功能:<reset>")
 		for _, l := range args {
 			lines = append(lines, fmt.Sprintf("  <info>%-"+fmt.Sprintf("%d", argMax)+"s<reset>  %s", l[0], l[1]))
 		}
@@ -155,7 +155,7 @@ var DescribeCommand = func(c *Command) string {
 	}
 
 	if len(opts) > 0 {
-		lines = append(lines, "<subline>Options:<reset>")
+		lines = append(lines, "<subline>选项:<reset>")
 		for _, l := range opts {
 			lines = append(lines, fmt.Sprintf("  <info>%-"+fmt.Sprintf("%d", optMax)+"s<reset>  %s", l[0], l[1]))
 		}

@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
+	"github.com/dedecms/dedetools/clif"
 	"github.com/dedecms/dedetools/info"
 	"github.com/dedecms/dedetools/utf8"
 	"github.com/kenkyu392/go-safe"
-	"github.com/ukautz/clif"
 )
 
 func main() {

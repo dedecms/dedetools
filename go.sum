@@ -41,8 +41,6 @@ github.com/smartystreets/goconvey v1.6.4/go.mod h1:syvi0/a8iFYH4r/RixwvyeAJjdLS9
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/ukautz/clif v0.0.0-20190218144324-df36acc24204 h1:sh5ihmi8K9HvV6Yqgdi5BfQHyRUKGpCzdN1NdX7FZ7I=
-github.com/ukautz/clif v0.0.0-20190218144324-df36acc24204/go.mod h1:FRZ4WC2RSZpxFuzhitZ6rS1s/BsQsvrZabdUUjcTYx4=
 github.com/ukautz/reflekt v0.0.0-20180611090553-6ce38d64d188 h1:V+xJ8u8fbQ7lZMDUHIgAA7b8xWuYMiCA8XFMWB6X7to=
 github.com/ukautz/reflekt v0.0.0-20180611090553-6ce38d64d188/go.mod h1:VIURLJ/xSK4bDnEvtcsVxTTrKUoooztCCtD7nAmhzlE=
 github.com/yuin/charsetutil v1.0.0 h1:yMFDHL1cp9PUuwQHIzSrscOggJ0lStCkVqodXs57NKY=

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dedecms/dedetools/clif"
 	"github.com/dedecms/snake"
-	"github.com/ukautz/clif"
 )
 
 func Copyright() string {

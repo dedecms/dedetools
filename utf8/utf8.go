@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dedecms/dedetools/clif"
 	"github.com/dedecms/dedetools/encode"
 	"github.com/dedecms/dedetools/log"
 	"github.com/dedecms/dedetools/orm"
@@ -13,7 +14,6 @@ import (
 	"github.com/dedecms/snake"
 	"github.com/dedecms/snake/pkg"
 	"github.com/i582/cfmt/cmd/cfmt"
-	"github.com/ukautz/clif"
 )
 
 type Module struct {

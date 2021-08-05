@@ -3,9 +3,9 @@ package util
 import (
 	"fmt"
 
+	"github.com/dedecms/dedetools/clif"
 	"github.com/dedecms/dedetools/orm"
 	"github.com/dedecms/snake"
-	"github.com/ukautz/clif"
 )
 
 func Ask(t, d, o string, input clif.Input) string {

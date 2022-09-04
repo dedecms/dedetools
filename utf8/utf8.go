@@ -2,7 +2,6 @@ package utf8
 
 import (
 	"fmt"
-	"os/exec"
 	"strings"
 	"time"
 
@@ -45,40 +44,40 @@ func Init(in clif.Input, out clif.Output) {
 			TopLeft:     "#",
 		}).Get())
 
-	l := log.Start("检查mysql是否可以执行")
-MYSQL:
-	if path, err := exec.LookPath(env.mysqlPATH); err != nil {
-		l.Err(err)
-		env.mysqlPATH = util.Ask("请输入mysql或mysql.exe的位置。", "", "file", in)
-		goto MYSQL
-	} else {
-		env.mysqlPATH = path
-	}
+	// 	l := log.Start("检查mysql是否可以执行")
+	// MYSQL:
+	// 	if path, err := exec.LookPath(env.mysqlPATH); err != nil {
+	// 		l.Err(err)
+	// 		env.mysqlPATH = util.Ask("请输入mysql或mysql.exe的位置。", "", "file", in)
+	// 		goto MYSQL
+	// 	} else {
+	// 		env.mysqlPATH = path
+	// 	}
 
-	l.Done()
+	// 	l.Done()
 
-	l = log.Start("检查mysqldump是否可以执行")
-MYSQLDUMP:
-	if path, err := exec.LookPath(env.mysqldumpPATH); err != nil {
-		l.Err(err)
-		env.mysqldumpPATH = util.Ask("请输入mysqldump或mysqldump.exe的位置。", "", "file", in)
-		goto MYSQLDUMP
-	} else {
-		env.mysqldumpPATH = path
-	}
-	l.Done()
+	// 	l = log.Start("检查mysqldump是否可以执行")
+	// MYSQLDUMP:
+	// 	if path, err := exec.LookPath(env.mysqldumpPATH); err != nil {
+	// 		l.Err(err)
+	// 		env.mysqldumpPATH = util.Ask("请输入mysqldump或mysqldump.exe的位置。", "", "file", in)
+	// 		goto MYSQLDUMP
+	// 	} else {
+	// 		env.mysqldumpPATH = path
+	// 	}
+	// 	l.Done()
 
 	wwwdir := util.Ask("请输入WEB服务器中DedeCMS根目录位置", "./", "existdir", in)
 	outputDIR := util.Ask("请输入DedeCMS转换后存储目录位置", "./output_dedecms_utf8", "makedir", in)
 
-BACKUPSQL:
-	common := util.Ask("请输入./data/common.inc.php文件位置", "./data/common.inc.php", "existfile", in)
-	orm.GetCommon(common)
+	// BACKUPSQL:
+	// 	common := util.Ask("请输入./data/common.inc.php文件位置", "./data/common.inc.php", "existfile", in)
+	// 	orm.GetCommon(common)
 
-	if err := backupSQL(outputDIR); err != nil {
-		cfmt.Println(err.Error(), "\n")
-		goto BACKUPSQL
-	}
+	// 	if err := backupSQL(outputDIR); err != nil {
+	// 		cfmt.Println(err.Error(), "\n")
+	// 		goto BACKUPSQL
+	// 	}
 	backupWWW(wwwdir, outputDIR)
 	fmt.Println()
 	database := util.Ask("请输入UTF8数据库名 <warn>(禁止覆盖原数据库)<reset>", "db_output_dedecms_utf8", "database", in)
@@ -181,6 +180,19 @@ func backupWWW(wwwDIR, outputDIR string) error {
 						}
 					}
 				}
+
+				bytes = snake.String(string(bytes)).
+					Replace("首选利器", "利器", true).
+					Replace("最专业", "专业", true).
+					Replace("最流行", "流行", true).
+					Replace("最稳定", "稳定", true).
+					Replace("最强大", "强大", true).
+					Replace("免费开源", "开源", true).
+					Replace("织梦科技公司", "上海卓卓网络科技有限公司", true).
+					Replace("织梦科技", "卓卓网络", true).
+					Replace("snow#DedeCMS.com", "jsy#DedeCMS.com", true).
+					Remove("、免费原则").
+					Byte()
 
 				snake.FS(outfile.Get()).ByteWriter(bytes)
 
